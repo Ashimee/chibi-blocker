@@ -1,0 +1,21 @@
+    <script>
+        /* chibi blocker https://github.com/SurvExe1Pc */
+        function chibiDetected() { document.write('Page has failed to load, try removing any userscripts like chibi.') }
+        /* chibi blocker (part 1 this handles it if it errors), this will probally be fixed sooner or later so it relies on a bug technically */
+        const OldError = Error;
+        Error = class {
+            constructor(err) {
+                this.err = err;
+                if (this.err == 'Automatic publicPath is not supported in this browser') {
+                    chibiDetected();
+                }
+                return OldError(this.err);
+            }
+        }
+        /* chibi blocker (part 2 this handles the working code) */
+        const oldSetTimeout = setTimeout;
+        setTimeout = (func, ms) => {
+            if (func.toString().includes('chibi')) chibiDetected();
+            return oldSetTimeout(func, ms);
+        }
+    </script>
